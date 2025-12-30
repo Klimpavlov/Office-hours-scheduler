@@ -1,4 +1,5 @@
 import { pgTable, boolean, text, timestamp, index } from "drizzle-orm/pg-core";
+import {userRoleEnum} from "@/db/rbac";
 
 export const user = pgTable("user", {
     id: text("id").primaryKey(),
@@ -11,6 +12,7 @@ export const user = pgTable("user", {
         .defaultNow()
         .$onUpdate(() => /* @__PURE__ */ new Date())
         .notNull(),
+    role: userRoleEnum("role").default("USER").notNull()
 });
 
 export const session = pgTable(
