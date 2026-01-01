@@ -1,5 +1,5 @@
-import { pgTable, boolean, text, timestamp, index } from "drizzle-orm/pg-core";
-import { pgEnum } from "drizzle-orm/pg-core";
+import {pgTable, boolean, text, timestamp, index, integer} from "drizzle-orm/pg-core";
+import {pgEnum} from "drizzle-orm/pg-core";
 
 export const userRoleEnum = pgEnum("user_role", [
     "USER",
@@ -35,7 +35,7 @@ export const session = pgTable(
         userAgent: text("user_agent"),
         userId: text("user_id")
             .notNull()
-            .references(() => user.id, { onDelete: "cascade" }),
+            .references(() => user.id, {onDelete: "cascade"}),
     },
     (table) => [index("session_userId_idx").on(table.userId)],
 );
@@ -48,7 +48,7 @@ export const account = pgTable(
         providerId: text("provider_id").notNull(),
         userId: text("user_id")
             .notNull()
-            .references(() => user.id, { onDelete: "cascade" }),
+            .references(() => user.id, {onDelete: "cascade"}),
         accessToken: text("access_token"),
         refreshToken: text("refresh_token"),
         idToken: text("id_token"),
@@ -79,3 +79,16 @@ export const verification = pgTable(
     },
     (table) => [index("verification_identifier_idx").on(table.identifier)],
 );
+
+export const availabilityRule = pgTable("availability_rule", {
+    id: text("id").primaryKey(),
+    specialistId: text("specialist_id")
+        .notNull()
+        .references(()=> user.id, {onDelete: "cascade"}),
+    weekday: integer("weekday").notNull(),
+    startTime: text("start_time").notNull(),
+    endTime: text("end_time").notNull(),
+    slotDurationMinutes: integer("slot_duration_minutes").notNull(),
+    timezone: text("timezone").notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+})
