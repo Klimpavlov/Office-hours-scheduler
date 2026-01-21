@@ -7,79 +7,71 @@ import { eq, and, gte, lte, inArray } from "drizzle-orm";
 
 const DAYS = 14;
 
-export async function getSpecialistSlotsNext14Days(
-    specialistId: string
-) {
-    const now = new Date();
-    const endDate = new Date();
-    endDate.setDate(now.getDate() + DAYS);
+export async function getSpecialistSlotsNext14Days(specialistId: string) {
+  const now = new Date();
+  const endDate = new Date();
+  endDate.setDate(now.getDate() + DAYS);
 
-    const rules = await db
-        .select()
-        .from(availabilityRule)
-        .where(eq(availabilityRule.specialistId, specialistId));
+  const rules = await db
+    .select()
+    .from(availabilityRule)
+    .where(eq(availabilityRule.specialistId, specialistId));
 
-    const bookings = await db
-        .select()
-        .from(booking)
-        .where(
-            and(
-                eq(booking.specialistId, specialistId),
-                inArray(booking.status, ["REQUESTED", "APPROVED"]),
-                gte(booking.startsAt, now),
-                lte(booking.startsAt, endDate)
-            )
-        );
-
-    const bookedMap = new Set(
-        bookings.map(b => b.startsAt.toISOString())
+  const bookings = await db
+    .select()
+    .from(booking)
+    .where(
+      and(
+        eq(booking.specialistId, specialistId),
+        inArray(booking.status, ["REQUESTED", "APPROVED"]),
+        gte(booking.startsAt, now),
+        lte(booking.startsAt, endDate),
+      ),
     );
 
-    const slots: {
-        startsAt: Date;
-        endsAt: Date;
-        isBooked: boolean;
-    }[] = [];
+  const bookedMap = new Set(bookings.map((b) => b.startsAt.toISOString()));
 
-    for (let dayOffset = 0; dayOffset < DAYS; dayOffset++) {
-        const date = new Date(now);
-        date.setDate(now.getDate() + dayOffset);
+  const slots: {
+    startsAt: Date;
+    endsAt: Date;
+    isBooked: boolean;
+  }[] = [];
 
-        const weekday = date.getDay(); // 0–6
+  for (let dayOffset = 0; dayOffset < DAYS; dayOffset++) {
+    const date = new Date(now);
+    date.setDate(now.getDate() + dayOffset);
 
-        const dayRules = rules.filter(
-            r => r.weekday === weekday
-        );
+    const weekday = date.getDay(); // 0–6
 
-        for (const rule of dayRules) {
-            const [startH, startM] = rule.startTime.split(":").map(Number);
-            const [endH, endM] = rule.endTime.split(":").map(Number);
+    const dayRules = rules.filter((r) => r.weekday === weekday);
 
-            let cursor = new Date(date);
-            cursor.setHours(startH, startM, 0, 0);
+    for (const rule of dayRules) {
+      const [startH, startM] = rule.startTime.split(":").map(Number);
+      const [endH, endM] = rule.endTime.split(":").map(Number);
 
-            const end = new Date(date);
-            end.setHours(endH, endM, 0, 0);
+      let cursor = new Date(date);
+      cursor.setHours(startH, startM, 0, 0);
 
-            while (cursor < end) {
-                const slotStart = new Date(cursor);
-                const slotEnd = new Date(cursor);
-                slotEnd.setMinutes(
-                    slotEnd.getMinutes() + rule.slotDurationMinutes
-                );
+      const end = new Date(date);
+      end.setHours(endH, endM, 0, 0);
 
-                if (slotEnd > end) break;
+      while (cursor < end) {
+        const slotStart = new Date(cursor);
+        const slotEnd = new Date(cursor);
+        slotEnd.setMinutes(slotEnd.getMinutes() + rule.slotDurationMinutes);
 
-                slots.push({
-                    startsAt: slotStart,
-                    endsAt: slotEnd,
-                    isBooked: bookedMap.has(slotStart.toISOString()),
-                });
+        if (slotEnd > end) break;
 
-                cursor = slotEnd;
-            }
-        }
+        slots.push({
+          startsAt: slotStart,
+          endsAt: slotEnd,
+          isBooked: bookedMap.has(slotStart.toISOString()),
+        });
+
+        cursor = slotEnd;
+      }
     }
+  }
 
-    return slots;
+  return slots;
 }
