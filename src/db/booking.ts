@@ -33,6 +33,8 @@ export const booking = pgTable(
       .default("PENDING")
       .notNull(),
     moderationReason: text("moderation_reason"),
+      approvedAt: timestamp("approved_at"),
+      approvedBy: text("approved_by").references(() => user.id),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
       .defaultNow()
@@ -44,6 +46,5 @@ export const booking = pgTable(
   (table) => ({
     uniqueSlot: index("booking_unique_slot")
       .on(table.specialistId, table.startsAt)
-      .unique(),
   }),
 );

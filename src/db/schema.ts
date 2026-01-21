@@ -87,15 +87,3 @@ export const verification = pgTable(
   (table) => [index("verification_identifier_idx").on(table.identifier)],
 );
 
-export const availabilityRule = pgTable("availability_rule", {
-  id: text("id").primaryKey(),
-  specialistId: text("specialist_id")
-    .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
-  weekday: integer("weekday").notNull(),
-  startTime: text("start_time").notNull(),
-  endTime: text("end_time").notNull(),
-  slotDurationMinutes: integer("slot_duration_minutes").notNull(),
-  timezone: text("timezone").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-});

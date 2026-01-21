@@ -15,6 +15,13 @@
       "when": 1767293171479,
       "tag": "0001_gigantic_romulus",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1768985704426,
+      "tag": "0002_tiny_gunslinger",
+      "breakpoints": true
     }
   ]
 }
