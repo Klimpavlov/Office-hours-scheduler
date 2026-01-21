@@ -3,6 +3,7 @@ export const createBookingSchema = z.object({
   specialistId: z.string().min(1),
   startsAt: z.string().datetime(),
   endsAt: z.string().datetime(),
+  description: z.string().min(1).max(5000),
 });
 
 export const bookingIdSchema = z.object({

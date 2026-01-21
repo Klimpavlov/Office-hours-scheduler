@@ -4,6 +4,7 @@ import { createBookingSchema } from "@/actions/booking/schema";
 import { db } from "@/db";
 import { booking } from "@/db/booking";
 import { randomUUID } from "crypto";
+import { moderateBookingText } from "@/lib/moderation";
 
 function isPostgresError(err: unknown): err is { code: string } {
   return (
@@ -22,6 +23,11 @@ export async function createBooking(input: unknown) {
   }
 
   const data = createBookingSchema.parse(input);
+  const moderation = await moderateBookingText(data.description);
+
+  if (moderation.status === "REJECTED") {
+    throw new Error("Booking rejected by moderation");
+  }
 
   try {
     const [created] = await db
@@ -33,7 +39,8 @@ export async function createBooking(input: unknown) {
         startsAt: new Date(data.startsAt),
         endsAt: new Date(data.endsAt),
         status: "REQUESTED",
-        moderationStatus: "PENDING",
+        moderationStatus: moderation.status,
+        moderationReason: moderation.reason ?? null,
       })
       .returning();
 
