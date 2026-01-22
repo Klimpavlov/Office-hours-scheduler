@@ -69,12 +69,11 @@ const SignInView = () => {
         authClient.signIn.social(
             {
                 provider: provider,
-                callbackURL: "/", // equal to make router.push in onSuccess
+                callbackURL: "/",
             },
             {
                 onSuccess: () => {
                     setPending(false);
-                    // router.push("/");
                 },
             },
             {
