@@ -187,7 +187,7 @@ const SignInView = () => {
                     items-center justify-center"
           >
             <img src="/logo.svg" alt="Image" className="h-[92px] w-[92px]" />
-            <p className="text-2xl font-semibold text-white">Meet AI</p>
+            <p className="text-2xl font-semibold text-white">Booking system</p>
           </div>
         </CardContent>
       </Card>
