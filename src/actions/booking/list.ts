@@ -8,10 +8,6 @@ import { and, desc, eq, inArray } from "drizzle-orm";
 export async function listMyBookings() {
   const user = await requireUser();
 
-  if (user.role !== "USER") {
-    throw new Error("Only users can view their bookings");
-  }
-
   const rows = await db
     .select()
     .from(booking)
