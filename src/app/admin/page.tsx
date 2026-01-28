@@ -49,7 +49,6 @@ export default async function AdminPage() {
                       <Badge variant="secondary">{u.role}</Badge>
                     </td>
                     <td className="px-4 py-3">
-                      {/*<PromoteButton userId={u.id} isSpecialist={u.isSpecialist} />*/}
                       {u.role === "ADMIN" ? (
                         <span className="text-muted-foreground text-xs">—</span>
                       ) : (
