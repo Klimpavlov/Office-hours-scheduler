@@ -12,12 +12,10 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { requireUser } from "@/lib/action";
-import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import {LogoutButton} from "@/components/ui/logout-button";
 
 export async function AppSidebar() {
   const user = await requireUser().catch(() => null);
-  const router = useRouter();
   const items = [
     {
       title: "Home",
@@ -73,7 +71,7 @@ export async function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <Button onClick={() => router.push("/sign-in")}>Sign out</Button>
+        <LogoutButton />
       </SidebarFooter>
     </Sidebar>
   );
