@@ -1,8 +1,5 @@
 import { requireUser } from "@/lib/action";
-import {
-  listUsersForAdmin,
-  listAllBookingsForAdmin,
-} from "@/actions/admin";
+import { listUsersForAdmin, listAllBookingsForAdmin } from "@/actions/admin";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { PromoteButton } from "./promote-button";
@@ -45,16 +42,21 @@ export default async function AdminPage() {
                 {users.map((u) => (
                   <tr key={u.id} className="border-b last:border-0">
                     <td className="px-4 py-3">{u.name}</td>
-                    <td className="px-4 py-3 text-muted-foreground">{u.email}</td>
+                    <td className="px-4 py-3 text-muted-foreground">
+                      {u.email}
+                    </td>
                     <td className="px-4 py-3">
                       <Badge variant="secondary">{u.role}</Badge>
                     </td>
                     <td className="px-4 py-3">
                       {/*<PromoteButton userId={u.id} isSpecialist={u.isSpecialist} />*/}
                       {u.role === "ADMIN" ? (
-                          <span className="text-muted-foreground text-xs">—</span>
+                        <span className="text-muted-foreground text-xs">—</span>
                       ) : (
-                          <PromoteButton userId={u.id} isSpecialist={u.isSpecialist} />
+                        <PromoteButton
+                          userId={u.id}
+                          isSpecialist={u.isSpecialist}
+                        />
                       )}
                     </td>
                   </tr>
@@ -96,7 +98,8 @@ export default async function AdminPage() {
                 </CardHeader>
                 <CardContent className="space-y-1 text-sm">
                   <p>
-                    User: {b.userName ?? b.userId} · {new Date(b.startsAt).toLocaleString()} –{" "}
+                    User: {b.userName ?? b.userId} ·{" "}
+                    {new Date(b.startsAt).toLocaleString()} –{" "}
                     {new Date(b.endsAt).toLocaleString()}
                   </p>
                   {b.moderationReason && (

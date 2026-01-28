@@ -14,10 +14,7 @@ export async function promoteToSpecialist(userId: string) {
     throw new Error("Only admin can promote users");
   }
 
-  const [target] = await db
-      .select()
-      .from(user)
-      .where(eq(user.id, userId));
+  const [target] = await db.select().from(user).where(eq(user.id, userId));
 
   if (!target) {
     throw new Error("User not found");
@@ -25,15 +22,15 @@ export async function promoteToSpecialist(userId: string) {
 
   if (target.role !== "SPECIALIST") {
     await db
-        .update(user)
-        .set({ role: "SPECIALIST" })
-        .where(eq(user.id, userId));
+      .update(user)
+      .set({ role: "SPECIALIST" })
+      .where(eq(user.id, userId));
   }
 
   const [existing] = await db
-      .select()
-      .from(specialistProfile)
-      .where(eq(specialistProfile.userId, userId));
+    .select()
+    .from(specialistProfile)
+    .where(eq(specialistProfile.userId, userId));
 
   if (!existing) {
     await db.insert(specialistProfile).values({

@@ -27,7 +27,9 @@ export type ModerationOutput = {
  * Only the description text is sent; no user email/name. See README for guardrails.
  * On API errors (e.g. "Country not supported" 403), returns PENDING so the booking still saves.
  */
-export async function moderateBookingText(text: string): Promise<ModerationOutput> {
+export async function moderateBookingText(
+  text: string,
+): Promise<ModerationOutput> {
   try {
     const result = await generateText({
       model: openai(MODEL_ID),
@@ -61,7 +63,9 @@ Respond ONLY with valid JSON:
     return {
       status,
       reason: parsed.reason,
-      categories: Array.isArray(parsed.categories) ? parsed.categories : undefined,
+      categories: Array.isArray(parsed.categories)
+        ? parsed.categories
+        : undefined,
       model: MODEL_ID,
       provider: PROVIDER,
     };

@@ -136,14 +136,20 @@ async function main() {
     const id = await ensureUser(s.email, s.name, "SPECIALIST");
     await ensureSpecialistProfile(id, s.bio, s.tags);
     await ensureAvailabilityRules(id);
-    console.log("  Специалист:", s.email, "— слоты на ближайшие 14 дней по правилам.");
+    console.log(
+      "  Специалист:",
+      s.email,
+      "— слоты на ближайшие 14 дней по правилам.",
+    );
   }
 
   await ensureUser(adminUser.email, adminUser.name, "ADMIN");
   console.log("  Админ:", adminUser.email);
 
   console.log("\nГотово. Пароль для всех тестовых аккаунтов: password123");
-  console.log("  Вход: specialist1@test.com, specialist2@test.com, admin@test.com");
+  console.log(
+    "  Вход: specialist1@test.com, specialist2@test.com, admin@test.com",
+  );
   console.log("  Под своим user откройте /specialists и бронируйте слоты.");
 }
 

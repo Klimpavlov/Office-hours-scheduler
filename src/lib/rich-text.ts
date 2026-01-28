@@ -16,7 +16,9 @@ type TiptapNode = TiptapDoc & Record<string, unknown>;
 const MAX_CHARS = 10_000;
 
 /** Recursively extract plain text from Tiptap JSON for moderation and display. */
-export function getTextFromTiptapJson(doc: TiptapDoc | null | undefined): string {
+export function getTextFromTiptapJson(
+  doc: TiptapDoc | null | undefined,
+): string {
   if (!doc) return "";
   if (typeof doc.text === "string") return doc.text;
   const parts: string[] = [];

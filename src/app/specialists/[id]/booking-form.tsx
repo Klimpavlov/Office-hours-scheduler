@@ -3,7 +3,10 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createBookingSchema, type CreateBookingInput } from "@/actions/booking/schema";
+import {
+  createBookingSchema,
+  type CreateBookingInput,
+} from "@/actions/booking/schema";
 import { createBooking } from "@/actions/booking";
 import { Button } from "@/components/ui/button";
 import {
@@ -62,7 +65,9 @@ export function BookingForm({
     <Card>
       <CardHeader>
         <CardTitle>Request a booking</CardTitle>
-        <CardDescription>Choose a slot and describe your request (rich text).</CardDescription>
+        <CardDescription>
+          Choose a slot and describe your request (rich text).
+        </CardDescription>
       </CardHeader>
       <CardContent>
         {available.length === 0 ? (
@@ -79,7 +84,9 @@ export function BookingForm({
                 onChange={(e) => {
                   const v = e.target.value;
                   if (v) {
-                    const slot = available.find((s) => s.startsAt.toISOString() === v);
+                    const slot = available.find(
+                      (s) => s.startsAt.toISOString() === v,
+                    );
                     if (slot) {
                       form.setValue("startsAt", slot.startsAt.toISOString());
                       form.setValue("endsAt", slot.endsAt.toISOString());

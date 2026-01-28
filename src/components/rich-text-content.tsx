@@ -26,7 +26,7 @@ function NodeRenderer({ node }: { node: TiptapDoc }) {
   const type = node.type ?? "paragraph";
   const children = Array.isArray(node.content)
     ? node.content.map((n, i) => <NodeRenderer key={i} node={n as TiptapDoc} />)
-    : node.text ?? "";
+    : (node.text ?? "");
 
   switch (type) {
     case "paragraph":
@@ -39,13 +39,20 @@ function NodeRenderer({ node }: { node: TiptapDoc }) {
       return <li className="mb-1">{children}</li>;
     case "text": {
       let out: React.ReactNode = node.text ?? "";
-      const marks = (node as { marks?: { type: string; attrs?: { href?: string } }[] }).marks ?? [];
+      const marks =
+        (node as { marks?: { type: string; attrs?: { href?: string } }[] })
+          .marks ?? [];
       for (const m of marks) {
         if (m.type === "bold") out = <strong>{out}</strong>;
         else if (m.type === "italic") out = <em>{out}</em>;
         else if (m.type === "link" && m.attrs?.href)
           out = (
-            <a href={m.attrs.href} target="_blank" rel="noopener noreferrer" className="underline">
+            <a
+              href={m.attrs.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline"
+            >
               {out}
             </a>
           );

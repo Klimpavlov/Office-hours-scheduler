@@ -24,8 +24,7 @@ export function RequestActions({
   const [pending, setPending] = useState(false);
   const router = useRouter();
   const canApproveDecline = status === "REQUESTED";
-  const showReview =
-    moderationStatus === "FLAGGED" && !moderationReviewedBy;
+  const showReview = moderationStatus === "FLAGGED" && !moderationReviewedBy;
 
   async function handleApprove() {
     setPending(true);
@@ -73,13 +72,23 @@ export function RequestActions({
           <Button size="sm" onClick={handleApprove} disabled={pending}>
             Approve
           </Button>
-          <Button size="sm" variant="outline" onClick={handleDecline} disabled={pending}>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={handleDecline}
+            disabled={pending}
+          >
             Decline
           </Button>
         </>
       )}
       {showReview && (
-        <Button size="sm" variant="secondary" onClick={handleReview} disabled={pending}>
+        <Button
+          size="sm"
+          variant="secondary"
+          onClick={handleReview}
+          disabled={pending}
+        >
           Mark reviewed
         </Button>
       )}

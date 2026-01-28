@@ -87,7 +87,10 @@ export function RichTextEditor({
   const editor = useEditor({
     extensions: [
       StarterKit,
-      Link.configure({ openOnClick: false, HTMLAttributes: { target: "_blank", rel: "noopener" } }),
+      Link.configure({
+        openOnClick: false,
+        HTMLAttributes: { target: "_blank", rel: "noopener" },
+      }),
     ],
     content: value ?? defaultDoc,
     editorProps: {

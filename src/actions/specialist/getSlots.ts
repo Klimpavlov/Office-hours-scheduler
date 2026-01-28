@@ -60,7 +60,9 @@ export async function getSpecialistSlotsNext14Days(specialistId: string) {
 
       while (cursor < endUtc) {
         const slotStart = new Date(cursor);
-        const slotEnd = new Date(cursor.getTime() + rule.slotDurationMinutes * 60 * 1000);
+        const slotEnd = new Date(
+          cursor.getTime() + rule.slotDurationMinutes * 60 * 1000,
+        );
         if (slotEnd > endUtc) break;
 
         slots.push({

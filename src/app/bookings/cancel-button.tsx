@@ -24,7 +24,12 @@ export function CancelBookingButton({ bookingId }: { bookingId: string }) {
   }
 
   return (
-    <Button variant="destructive" size="sm" onClick={handleCancel} disabled={pending}>
+    <Button
+      variant="destructive"
+      size="sm"
+      onClick={handleCancel}
+      disabled={pending}
+    >
       {pending ? "Cancelling…" : "Cancel"}
     </Button>
   );

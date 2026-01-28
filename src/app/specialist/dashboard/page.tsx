@@ -43,7 +43,8 @@ export default async function SpecialistDashboard() {
                 className="flex items-center justify-between rounded-lg border px-3 py-2 text-sm"
               >
                 <span>
-                  {WEEKDAY[r.weekday]} {r.startTime}–{r.endTime}, {r.slotDurationMinutes}min, {r.timezone}
+                  {WEEKDAY[r.weekday]} {r.startTime}–{r.endTime},{" "}
+                  {r.slotDurationMinutes}min, {r.timezone}
                 </span>
                 <RuleDeleteButton
                   ruleId={r.id}
@@ -55,7 +56,9 @@ export default async function SpecialistDashboard() {
             ))}
           </ul>
         ) : (
-          <p className="mt-2 text-muted-foreground">No rules yet. Add one above.</p>
+          <p className="mt-2 text-muted-foreground">
+            No rules yet. Add one above.
+          </p>
         )}
       </section>
 
@@ -82,7 +85,9 @@ export default async function SpecialistDashboard() {
                       {b.moderationStatus}
                     </Badge>
                     {b.moderationReviewedBy && (
-                      <span className="text-xs text-muted-foreground">Reviewed</span>
+                      <span className="text-xs text-muted-foreground">
+                        Reviewed
+                      </span>
                     )}
                   </div>
                   <RequestActions

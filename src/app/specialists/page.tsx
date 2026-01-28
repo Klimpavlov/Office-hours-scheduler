@@ -14,7 +14,9 @@ export default async function SpecialistsPage({
       <h1 className="text-2xl font-bold">Specialists</h1>
       <SpecialistsList specialists={specialists} tag={tag} />
       {specialists.length === 0 && (
-        <p className="text-center text-muted-foreground">No specialists found.</p>
+        <p className="text-center text-muted-foreground">
+          No specialists found.
+        </p>
       )}
     </div>
   );

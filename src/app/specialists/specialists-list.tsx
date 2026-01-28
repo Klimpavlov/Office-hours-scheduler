@@ -43,9 +43,7 @@ export function SpecialistsList({
                   </p>
                 )}
                 {s.tags && (
-                  <p className="mt-2 text-xs text-muted-foreground">
-                    {s.tags}
-                  </p>
+                  <p className="mt-2 text-xs text-muted-foreground">{s.tags}</p>
                 )}
               </CardContent>
             </Card>

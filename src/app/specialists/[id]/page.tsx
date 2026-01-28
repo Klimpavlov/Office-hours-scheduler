@@ -1,5 +1,8 @@
 import { notFound } from "next/navigation";
-import { getSpecialistById, getSpecialistSlotsNext14Days } from "@/actions/specialist";
+import {
+  getSpecialistById,
+  getSpecialistSlotsNext14Days,
+} from "@/actions/specialist";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { BookingForm } from "./booking-form";
@@ -22,7 +25,10 @@ export default async function SpecialistPage({
       <Card>
         <CardHeader className="flex flex-row items-center gap-4">
           <Avatar className="h-16 w-16">
-            <AvatarImage src={specialist.image ?? undefined} alt={specialist.name} />
+            <AvatarImage
+              src={specialist.image ?? undefined}
+              alt={specialist.name}
+            />
             <AvatarFallback className="text-lg">
               {specialist.name.slice(0, 2).toUpperCase()}
             </AvatarFallback>
@@ -37,9 +43,13 @@ export default async function SpecialistPage({
       </Card>
 
       <section>
-        <h2 className="mb-4 text-xl font-semibold">Available slots (next 14 days)</h2>
+        <h2 className="mb-4 text-xl font-semibold">
+          Available slots (next 14 days)
+        </h2>
         {slots.length === 0 ? (
-          <p className="text-muted-foreground">No slots available in the next 14 days.</p>
+          <p className="text-muted-foreground">
+            No slots available in the next 14 days.
+          </p>
         ) : (
           <div className="grid gap-2 sm:grid-cols-2 md:grid-cols-3">
             {slots.map((slot) => (

@@ -80,12 +80,8 @@
           "name": "availability_rule_specialist_id_user_id_fk",
           "tableFrom": "availability_rule",
           "tableTo": "user",
-          "columnsFrom": [
-            "specialist_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["specialist_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -285,12 +281,8 @@
           "name": "booking_user_id_user_id_fk",
           "tableFrom": "booking",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -298,12 +290,8 @@
           "name": "booking_specialist_id_user_id_fk",
           "tableFrom": "booking",
           "tableTo": "user",
-          "columnsFrom": [
-            "specialist_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["specialist_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -311,12 +299,8 @@
           "name": "booking_moderation_reviewed_by_user_id_fk",
           "tableFrom": "booking",
           "tableTo": "user",
-          "columnsFrom": [
-            "moderation_reviewed_by"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["moderation_reviewed_by"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -324,12 +308,8 @@
           "name": "booking_approved_by_user_id_fk",
           "tableFrom": "booking",
           "tableTo": "user",
-          "columnsFrom": [
-            "approved_by"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["approved_by"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -446,12 +426,8 @@
           "name": "account_user_id_user_id_fk",
           "tableFrom": "account",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -538,12 +514,8 @@
           "name": "session_user_id_user_id_fk",
           "tableFrom": "session",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -553,9 +525,7 @@
         "session_token_unique": {
           "name": "session_token_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "token"
-          ]
+          "columns": ["token"]
         }
       },
       "policies": {},
@@ -627,9 +597,7 @@
         "user_email_unique": {
           "name": "user_email_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
+          "columns": ["email"]
         }
       },
       "policies": {},
@@ -745,12 +713,8 @@
           "name": "specialist_profile_user_id_user_id_fk",
           "tableFrom": "specialist_profile",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -760,9 +724,7 @@
         "specialist_profile_user_id_unique": {
           "name": "specialist_profile_user_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "user_id"
-          ]
+          "columns": ["user_id"]
         }
       },
       "policies": {},
@@ -774,31 +736,17 @@
     "public.booking_status": {
       "name": "booking_status",
       "schema": "public",
-      "values": [
-        "REQUESTED",
-        "APPROVED",
-        "DECLINED",
-        "CANCELLED"
-      ]
+      "values": ["REQUESTED", "APPROVED", "DECLINED", "CANCELLED"]
     },
     "public.moderation_status": {
       "name": "moderation_status",
       "schema": "public",
-      "values": [
-        "PENDING",
-        "APPROVED",
-        "FLAGGED",
-        "REJECTED"
-      ]
+      "values": ["PENDING", "APPROVED", "FLAGGED", "REJECTED"]
     },
     "public.user_role": {
       "name": "user_role",
       "schema": "public",
-      "values": [
-        "USER",
-        "SPECIALIST",
-        "ADMIN"
-      ]
+      "values": ["USER", "SPECIALIST", "ADMIN"]
     }
   },
   "schemas": {},

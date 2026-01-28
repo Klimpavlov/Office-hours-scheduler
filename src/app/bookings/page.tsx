@@ -17,7 +17,9 @@ export default async function MyBookingsPage() {
     return (
       <div className="p-6">
         <h1 className="text-2xl font-bold">My bookings</h1>
-        <p className="mt-4 text-muted-foreground">You don’t have any bookings yet.</p>
+        <p className="mt-4 text-muted-foreground">
+          You don’t have any bookings yet.
+        </p>
       </div>
     );
   }
@@ -29,7 +31,9 @@ export default async function MyBookingsPage() {
         {bookings.map((b) => (
           <Card key={b.id}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <Badge variant={b.status === "APPROVED" ? "default" : "secondary"}>
+              <Badge
+                variant={b.status === "APPROVED" ? "default" : "secondary"}
+              >
                 {b.status}
               </Badge>
               {["REQUESTED", "APPROVED"].includes(b.status) && (

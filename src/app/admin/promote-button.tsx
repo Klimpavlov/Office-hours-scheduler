@@ -34,7 +34,12 @@ export function PromoteButton({
   }
 
   return (
-    <Button variant="outline" size="sm" onClick={handlePromote} disabled={pending}>
+    <Button
+      variant="outline"
+      size="sm"
+      onClick={handlePromote}
+      disabled={pending}
+    >
       {pending ? "Promoting…" : "Promote to specialist"}
     </Button>
   );

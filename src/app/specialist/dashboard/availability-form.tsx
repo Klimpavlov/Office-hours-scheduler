@@ -30,11 +30,7 @@ const WEEKDAYS = [
 
 type FormValues = z.infer<typeof availabilityRuleSchema>;
 
-export function AvailabilityForm({
-  onSuccess,
-}: {
-  onSuccess?: () => void;
-}) {
+export function AvailabilityForm({ onSuccess }: { onSuccess?: () => void }) {
   const router = useRouter();
   const form = useForm<FormValues>({
     resolver: zodResolver(availabilityRuleSchema),
@@ -60,7 +56,10 @@ export function AvailabilityForm({
   }
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+    <form
+      onSubmit={form.handleSubmit(onSubmit)}
+      className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5"
+    >
       <div className="space-y-2">
         <Label>Weekday</Label>
         <Select
@@ -83,28 +82,41 @@ export function AvailabilityForm({
         <Label>Start</Label>
         <Input type="time" {...form.register("startTime")} />
         {form.formState.errors.startTime && (
-          <p className="text-sm text-destructive">{form.formState.errors.startTime.message}</p>
+          <p className="text-sm text-destructive">
+            {form.formState.errors.startTime.message}
+          </p>
         )}
       </div>
       <div className="space-y-2">
         <Label>End</Label>
         <Input type="time" {...form.register("endTime")} />
         {form.formState.errors.endTime && (
-          <p className="text-sm text-destructive">{form.formState.errors.endTime.message}</p>
+          <p className="text-sm text-destructive">
+            {form.formState.errors.endTime.message}
+          </p>
         )}
       </div>
       <div className="space-y-2">
         <Label>Slot (min)</Label>
-        <Input type="number" min={5} max={240} {...form.register("slotDurationMinutes", { valueAsNumber: true })} />
+        <Input
+          type="number"
+          min={5}
+          max={240}
+          {...form.register("slotDurationMinutes", { valueAsNumber: true })}
+        />
         {form.formState.errors.slotDurationMinutes && (
-          <p className="text-sm text-destructive">{form.formState.errors.slotDurationMinutes.message}</p>
+          <p className="text-sm text-destructive">
+            {form.formState.errors.slotDurationMinutes.message}
+          </p>
         )}
       </div>
       <div className="space-y-2">
         <Label>Timezone (IANA)</Label>
         <Input placeholder="Europe/Berlin" {...form.register("timezone")} />
         {form.formState.errors.timezone && (
-          <p className="text-sm text-destructive">{form.formState.errors.timezone.message}</p>
+          <p className="text-sm text-destructive">
+            {form.formState.errors.timezone.message}
+          </p>
         )}
       </div>
       <div className="flex items-end">
