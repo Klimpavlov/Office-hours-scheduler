@@ -5,13 +5,14 @@ import { db } from "@/db";
 import { booking } from "@/db/booking";
 import { randomUUID } from "crypto";
 import { moderateBookingText } from "@/lib/moderation";
+import { getTextFromTiptapJson } from "@/lib/rich-text";
 
 function isPostgresError(err: unknown): err is { code: string } {
   return (
     typeof err === "object" &&
     err !== null &&
     "code" in err &&
-    typeof (err as any).code === "string"
+    typeof (err as { code?: string }).code === "string"
   );
 }
 
@@ -23,7 +24,8 @@ export async function createBooking(input: unknown) {
   }
 
   const data = createBookingSchema.parse(input);
-  const moderation = await moderateBookingText(data.description);
+  const plainText = getTextFromTiptapJson(data.descriptionJson);
+  const moderation = await moderateBookingText(plainText);
 
   if (moderation.status === "REJECTED") {
     throw new Error("Booking rejected by moderation");
@@ -39,8 +41,12 @@ export async function createBooking(input: unknown) {
         startsAt: new Date(data.startsAt),
         endsAt: new Date(data.endsAt),
         status: "REQUESTED",
+        descriptionJson: data.descriptionJson as Record<string, unknown>,
         moderationStatus: moderation.status,
         moderationReason: moderation.reason ?? null,
+        moderationCategories: moderation.categories ?? null,
+        moderationModel: moderation.model,
+        moderationProvider: moderation.provider,
       })
       .returning();
 

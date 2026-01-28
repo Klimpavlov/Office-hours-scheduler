@@ -18,8 +18,8 @@ export async function cancelBooking(input: unknown) {
     .update(booking)
     .set({
       status: "CANCELLED",
-      cancelledAt: new Date(),
-      cancelledBy: user.id,
+      statusChangedAt: new Date(),
+      statusChangedBy: user.id,
     })
     .where(
       and(

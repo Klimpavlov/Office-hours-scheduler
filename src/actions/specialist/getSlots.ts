@@ -4,13 +4,18 @@ import { db } from "@/db";
 import { availabilityRule } from "@/db/availabilityRule";
 import { booking } from "@/db/booking";
 import { eq, and, gte, lte, inArray } from "drizzle-orm";
+import { addDays } from "date-fns";
+import { fromZonedTime, toZonedTime } from "date-fns-tz";
 
 const DAYS = 14;
 
+/**
+ * Slots are generated on-the-fly from availability rules for the next 14 days.
+ * Rule start/end times are interpreted in the rule's IANA timezone; slot startsAt/endsAt are UTC.
+ */
 export async function getSpecialistSlotsNext14Days(specialistId: string) {
   const now = new Date();
-  const endDate = new Date();
-  endDate.setDate(now.getDate() + DAYS);
+  const endDate = addDays(now, DAYS);
 
   const rules = await db
     .select()
@@ -29,49 +34,45 @@ export async function getSpecialistSlotsNext14Days(specialistId: string) {
       ),
     );
 
-  const bookedMap = new Set(bookings.map((b) => b.startsAt.toISOString()));
+  const bookedSet = new Set(bookings.map((b) => b.startsAt.getTime()));
 
-  const slots: {
-    startsAt: Date;
-    endsAt: Date;
-    isBooked: boolean;
-  }[] = [];
+  const slots: { startsAt: Date; endsAt: Date; isBooked: boolean }[] = [];
 
-  for (let dayOffset = 0; dayOffset < DAYS; dayOffset++) {
-    const date = new Date(now);
-    date.setDate(now.getDate() + dayOffset);
+  for (const rule of rules) {
+    const [startH, startM] = rule.startTime.split(":").map(Number);
+    const [endH, endM] = rule.endTime.split(":").map(Number);
+    const tz = rule.timezone;
 
-    const weekday = date.getDay(); // 0–6
+    for (let dayOffset = 0; dayOffset < DAYS; dayOffset++) {
+      const todayInTz = toZonedTime(now, tz);
+      const thatDay = addDays(todayInTz, dayOffset);
+      const weekday = thatDay.getDay();
+      if (weekday !== rule.weekday) continue;
 
-    const dayRules = rules.filter((r) => r.weekday === weekday);
+      const y = thatDay.getFullYear();
+      const mo = thatDay.getMonth();
+      const d = thatDay.getDate();
 
-    for (const rule of dayRules) {
-      const [startH, startM] = rule.startTime.split(":").map(Number);
-      const [endH, endM] = rule.endTime.split(":").map(Number);
+      const localStart = new Date(y, mo, d, startH, startM, 0, 0);
+      const localEnd = new Date(y, mo, d, endH, endM, 0, 0);
+      let cursor = fromZonedTime(localStart, tz);
+      const endUtc = fromZonedTime(localEnd, tz);
 
-      let cursor = new Date(date);
-      cursor.setHours(startH, startM, 0, 0);
-
-      const end = new Date(date);
-      end.setHours(endH, endM, 0, 0);
-
-      while (cursor < end) {
+      while (cursor < endUtc) {
         const slotStart = new Date(cursor);
-        const slotEnd = new Date(cursor);
-        slotEnd.setMinutes(slotEnd.getMinutes() + rule.slotDurationMinutes);
-
-        if (slotEnd > end) break;
+        const slotEnd = new Date(cursor.getTime() + rule.slotDurationMinutes * 60 * 1000);
+        if (slotEnd > endUtc) break;
 
         slots.push({
           startsAt: slotStart,
           endsAt: slotEnd,
-          isBooked: bookedMap.has(slotStart.toISOString()),
+          isBooked: bookedSet.has(slotStart.getTime()),
         });
-
         cursor = slotEnd;
       }
     }
   }
 
+  slots.sort((a, b) => a.startsAt.getTime() - b.startsAt.getTime());
   return slots;
 }

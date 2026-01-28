@@ -2,6 +2,30 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+### Локальный запуск и тестовые данные
+
+1. Задайте `DATABASE_URL` в `.env` (PostgreSQL).
+2. Примените схему: `pnpm db:push`
+3. Создайте моковых специалистов и админа:
+   ```bash
+   pnpm db:seed
+   ```
+   Будут созданы:
+   - **specialist1@test.com** и **specialist2@test.com** (специалисты с правилами доступности)
+   - **admin@test.com** (админ)  
+   Пароль для всех: **password123**
+
+4. Под своим обычным user зайдите на [/specialists](http://localhost:3000/specialists), выберите специалиста и создайте бронь. Слоты считаются на ближайшие 14 дней по правилам (Europe/Berlin, пн–чт).
+
+Если эти email уже есть в базе, сид только обновит роли и добавит/обновит профили и правила доступности.
+
+### Где используется Vercel AI SDK
+
+- **Модерация описания брони** — `src/lib/moderation.ts`: при создании брони текст описания отправляется в OpenAI через `generateText` (Vercel AI SDK). Если API недоступен (например, 403 «Country not supported»), бронь всё равно создаётся с `moderationStatus: PENDING`, и специалист может проверить вручную.
+- **Чат** — `src/app/api/chat/route.ts`: `streamText` для чата (к бронированию не относится).
+
+---
+
 First, run the development server:
 
 ```bash

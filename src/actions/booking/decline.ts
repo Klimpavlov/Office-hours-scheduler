@@ -17,8 +17,8 @@ export async function declineBooking(input: unknown) {
     .update(booking)
     .set({
       status: "DECLINED",
-      approvedAt: new Date(),
-      approvedBy: user.id,
+      statusChangedAt: new Date(),
+      statusChangedBy: user.id,
     })
     .where(
       and(

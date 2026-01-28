@@ -1,31 +1,21 @@
-import {listSpecialists} from "@/actions/specialist";
-import {Card, CardContent} from "@/components/ui/card";
+import { listSpecialists } from "@/actions/specialist";
+import { SpecialistsList } from "./specialists-list";
 
- const SpecialistsPage = async () => {
-    const specialists = await listSpecialists()
+export default async function SpecialistsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ tag?: string }>;
+}) {
+  const { tag } = await searchParams;
+  const specialists = await listSpecialists({ tag });
 
-     if (specialists.length === 0) {
-         return (
-             <div className="p-8 text-center text-muted-foreground">
-                 No specialists available yet.
-             </div>
-         );
-     }
-
-    return (
-        <div className='grid gap-6 p-6 md:grid-cols-3'>
-            {specialists.map((s) => (
-                <Card key={s.id}>
-                    <CardContent className="p-4">
-                        <h3 className="font-semibold">{s.name}</h3>
-                        {s.bio && (
-                            <p className="text-sm text-muted-foreground mt-2">{s.bio}</p>
-                        )}
-                    </CardContent>
-                </Card>
-            ))}
-        </div>
-    )
+  return (
+    <div className="space-y-6 p-6">
+      <h1 className="text-2xl font-bold">Specialists</h1>
+      <SpecialistsList specialists={specialists} tag={tag} />
+      {specialists.length === 0 && (
+        <p className="text-center text-muted-foreground">No specialists found.</p>
+      )}
+    </div>
+  );
 }
-
-export default SpecialistsPage

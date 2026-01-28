@@ -20,6 +20,8 @@ export async function approveBooking(input: unknown) {
       status: "APPROVED",
       approvedAt: new Date(),
       approvedBy: user.id,
+      statusChangedAt: new Date(),
+      statusChangedBy: user.id,
     })
     .where(
       and(

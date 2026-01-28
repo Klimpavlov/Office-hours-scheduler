@@ -8,5 +8,6 @@ export const specialistProfile = pgTable("specialist_profile", {
     .references(() => user.id, { onDelete: "cascade" })
     .unique(),
   bio: text("bio"),
+  tags: text("tags"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });

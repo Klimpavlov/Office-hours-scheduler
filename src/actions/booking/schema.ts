@@ -1,9 +1,25 @@
 import { z } from "zod";
+import {
+  validateTiptapDoc,
+  getTextFromTiptapJson,
+  MAX_DESCRIPTION_CHARS,
+  type TiptapDoc,
+} from "@/lib/rich-text";
+
+const tiptapDocSchema = z
+  .record(z.string(), z.unknown())
+  .refine((v) => validateTiptapDoc(v as TiptapDoc), {
+    message: `Invalid rich-text: only doc/paragraph/text/bold/italic/link/lists allowed, max ${MAX_DESCRIPTION_CHARS} chars`,
+  })
+  .refine((v) => getTextFromTiptapJson(v as TiptapDoc).trim().length >= 1, {
+    message: "Description cannot be empty",
+  }) as z.ZodType<TiptapDoc>;
+
 export const createBookingSchema = z.object({
   specialistId: z.string().min(1),
   startsAt: z.string().datetime(),
   endsAt: z.string().datetime(),
-  description: z.string().min(1).max(5000),
+  descriptionJson: tiptapDocSchema,
 });
 
 export const bookingIdSchema = z.object({
