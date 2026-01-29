@@ -75,7 +75,6 @@
 //   return slots;
 // }
 
-
 "use server";
 
 import { db } from "@/db";
@@ -94,27 +93,27 @@ type Slot = {
 };
 
 export async function getSpecialistSlotsNext14Days(
-    specialistId: string,
+  specialistId: string,
 ): Promise<Slot[]> {
   const now = new Date();
   const endDate = addDays(now, DAYS);
 
   const rules = await db
-      .select()
-      .from(availabilityRule)
-      .where(eq(availabilityRule.specialistId, specialistId));
+    .select()
+    .from(availabilityRule)
+    .where(eq(availabilityRule.specialistId, specialistId));
 
   const bookings = await db
-      .select()
-      .from(booking)
-      .where(
-          and(
-              eq(booking.specialistId, specialistId),
-              inArray(booking.status, ["REQUESTED", "APPROVED"]),
-              gte(booking.startsAt, now),
-              lte(booking.startsAt, endDate),
-          ),
-      );
+    .select()
+    .from(booking)
+    .where(
+      and(
+        eq(booking.specialistId, specialistId),
+        inArray(booking.status, ["REQUESTED", "APPROVED"]),
+        gte(booking.startsAt, now),
+        lte(booking.startsAt, endDate),
+      ),
+    );
 
   const bookedSet = new Set(bookings.map((b) => b.startsAt.getTime()));
 
@@ -145,7 +144,7 @@ export async function getSpecialistSlotsNext14Days(
       while (cursor < endUtc) {
         const slotStart = new Date(cursor);
         const slotEnd = new Date(
-            cursor.getTime() + rule.slotDurationMinutes * 60 * 1000,
+          cursor.getTime() + rule.slotDurationMinutes * 60 * 1000,
         );
 
         if (slotEnd > endUtc) break;
@@ -166,6 +165,6 @@ export async function getSpecialistSlotsNext14Days(
   }
 
   return Array.from(slotMap.values()).sort(
-      (a, b) => a.startsAt.getTime() - b.startsAt.getTime(),
+    (a, b) => a.startsAt.getTime() - b.startsAt.getTime(),
   );
 }

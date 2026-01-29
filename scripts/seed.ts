@@ -30,8 +30,8 @@ const TEST_PASSWORD = "password123";
 const specialistUser = {
   email: "specialist@test.com",
   name: "Anna Specialist",
-  bio: "Frontend and TypeScript consulting.",
-  tags: "react,typescript,frontend",
+  bio: "Financial consulting.",
+  tags: "stock,taxes,investment",
 };
 
 const adminUser = {
@@ -45,20 +45,14 @@ const normalUser = {
 };
 
 async function ensureUser(
-    email: string,
-    name: string,
-    role: "USER" | "SPECIALIST" | "ADMIN",
+  email: string,
+  name: string,
+  role: "USER" | "SPECIALIST" | "ADMIN",
 ) {
-  const [existing] = await db
-      .select()
-      .from(user)
-      .where(eq(user.email, email));
+  const [existing] = await db.select().from(user).where(eq(user.email, email));
 
   if (existing) {
-    await db
-        .update(user)
-        .set({ name, role })
-        .where(eq(user.id, existing.id));
+    await db.update(user).set({ name, role }).where(eq(user.id, existing.id));
     return existing.id;
   }
 
@@ -85,20 +79,20 @@ async function ensureUser(
 }
 
 async function ensureSpecialistProfile(
-    userId: string,
-    bio: string,
-    tags: string,
+  userId: string,
+  bio: string,
+  tags: string,
 ) {
   const [existing] = await db
-      .select()
-      .from(specialistProfile)
-      .where(eq(specialistProfile.userId, userId));
+    .select()
+    .from(specialistProfile)
+    .where(eq(specialistProfile.userId, userId));
 
   if (existing) {
     await db
-        .update(specialistProfile)
-        .set({ bio, tags })
-        .where(eq(specialistProfile.id, existing.id));
+      .update(specialistProfile)
+      .set({ bio, tags })
+      .where(eq(specialistProfile.id, existing.id));
     return;
   }
 
@@ -112,9 +106,9 @@ async function ensureSpecialistProfile(
 
 async function ensureAvailabilityRules(specialistId: string) {
   const existing = await db
-      .select()
-      .from(availabilityRule)
-      .where(eq(availabilityRule.specialistId, specialistId));
+    .select()
+    .from(availabilityRule)
+    .where(eq(availabilityRule.specialistId, specialistId));
 
   if (existing.length > 0) return;
 
@@ -149,21 +143,21 @@ async function main() {
 
   // Specialist
   const specialistId = await ensureUser(
-      specialistUser.email,
-      specialistUser.name,
-      "SPECIALIST",
+    specialistUser.email,
+    specialistUser.name,
+    "SPECIALIST",
   );
   await ensureSpecialistProfile(
-      specialistId,
-      specialistUser.bio,
-      specialistUser.tags,
+    specialistId,
+    specialistUser.bio,
+    specialistUser.tags,
   );
   await ensureAvailabilityRules(specialistId);
 
   console.log(
-      "  Specialist created:",
-      specialistUser.email,
-      "(availability rules applied)",
+    "  Specialist created:",
+    specialistUser.email,
+    "(availability rules applied)",
   );
 
   // Admin

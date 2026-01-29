@@ -47,28 +47,28 @@ const SignUpView = () => {
     },
   });
 
-    const onSubmit = async (data: SignInFormType) => {
-        setError(null);
-        setPending(true);
+  const onSubmit = async (data: SignInFormType) => {
+    setError(null);
+    setPending(true);
 
-        const result = await authClient.signUp.email({
-            name: data.name,
-            email: data.email,
-            password: data.password,
-            callbackURL: "/",
-        });
+    const result = await authClient.signUp.email({
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      callbackURL: "/",
+    });
 
-        setPending(false);
+    setPending(false);
 
-        if (result?.error) {
-            setError(result.error.message ?? "Sign up failed");
-            return;
-        }
+    if (result?.error) {
+      setError(result.error.message ?? "Sign up failed");
+      return;
+    }
 
-        router.push("/");
-    };
+    router.push("/");
+  };
 
-    return (
+  return (
     <div className="flex flex-col gap-6">
       <Card className="overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">

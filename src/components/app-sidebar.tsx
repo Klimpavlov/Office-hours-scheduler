@@ -12,7 +12,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { requireUser } from "@/lib/action";
-import {LogoutButton} from "@/components/ui/logout-button";
+import { LogoutButton } from "@/components/ui/logout-button";
 
 export async function AppSidebar() {
   const user = await requireUser().catch(() => null);

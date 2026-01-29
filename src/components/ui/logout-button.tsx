@@ -6,18 +6,23 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export function LogoutButton() {
-    const [pending, setPending] = useState(false);
-    const router = useRouter();
+  const [pending, setPending] = useState(false);
+  const router = useRouter();
 
-    const onLogout = async () => {
-        setPending(true);
-        await authClient.signOut();
-        router.push("/sign-in");
-    };
+  const onLogout = async () => {
+    setPending(true);
+    await authClient.signOut();
+    router.push("/sign-in");
+  };
 
-    return (
-        <Button variant="outline" className='text-black' disabled={pending} onClick={onLogout}>
-            Sign out
-        </Button>
-    );
+  return (
+    <Button
+      variant="outline"
+      className="text-black"
+      disabled={pending}
+      onClick={onLogout}
+    >
+      Sign out
+    </Button>
+  );
 }
