@@ -6,6 +6,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 1. Set `DATABASE_URL` in `.env` (PostgreSQL).
    set `OPENAI_API_KEY` in `.env.local`
+   set `ARCJET_KEY` in `.env.local`
 2. Apply the scheme: `pnpm db:push`
 3. Create mock specialists and an admin:
    ```bash
