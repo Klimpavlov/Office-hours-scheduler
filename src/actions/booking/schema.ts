@@ -19,7 +19,7 @@ export const createBookingSchema = z.object({
   specialistId: z.string().min(1),
   startsAt: z.string().datetime(),
   endsAt: z.string().datetime(),
-  descriptionJson: tiptapDocSchema,
+  descriptionJson: z.custom<TiptapDoc>(),
 });
 
 export const bookingIdSchema = z.object({

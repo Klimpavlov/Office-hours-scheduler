@@ -108,13 +108,18 @@ export function RichTextEditor({
     }
   }, [editor, onChange]);
 
-  useEffect(() => {
-    if (!editor) return;
-    editor.on("update", notifyChange);
-    return () => editor.off("update", notifyChange);
-  }, [editor, notifyChange]);
+    useEffect(() => {
+        if (!editor) return;
 
-  useEffect(() => {
+        editor.on("update", notifyChange);
+
+        return () => {
+            editor.off("update", notifyChange);
+        };
+    }, [editor, notifyChange]);
+
+
+    useEffect(() => {
     if (!editor) return;
     const current = editor.getJSON() as TiptapDoc;
     const next = value ?? defaultDoc;
