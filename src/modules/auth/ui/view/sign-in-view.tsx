@@ -39,28 +39,24 @@ const SignInView = () => {
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+  const onSubmit = async (data: SignInFormType) => {
     setError(null);
     setPending(true);
-    authClient.signIn.email(
-      {
-        email: data.email,
-        password: data.password,
-        callbackURL: "/",
-      },
-      {
-        onSuccess: () => {
-          setPending(false);
-          router.push("/");
-        },
-      },
-      {
-        onError: ({ error }) => {
-          setPending(false);
-          setError(error?.message ?? "Invalid email or password");
-        },
-      },
-    );
+
+    const result = await authClient.signIn.email({
+      email: data.email,
+      password: data.password,
+      callbackURL: "/",
+    });
+
+    setPending(false);
+
+    if (result?.error) {
+      setError(result.error.message ?? "Invalid email or password");
+      return;
+    }
+
+    router.push("/");
   };
 
   return (
