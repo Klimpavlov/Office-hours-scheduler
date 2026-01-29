@@ -6,7 +6,6 @@ import { db } from "@/db";
 import { booking } from "@/db/booking";
 import { and, eq } from "drizzle-orm";
 
-/** Specialist or admin marks a flagged booking as reviewed (override). */
 export async function reviewModerationOverride(input: unknown) {
   const user = await requireUser();
   if (user.role !== "SPECIALIST" && user.role !== "ADMIN") {

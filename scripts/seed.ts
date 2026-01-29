@@ -1,54 +1,64 @@
 /**
- * Seed: mock specialists and admin for booking testing.
+ * Seed: demo users for booking system testing
  *
- * Create:
- * - 2 specialists (specialist1@test.com, specialist2@test.com) with accessibility rules
- * - 1 admin (admin@test.com)
+ * Creates:
+ * - 1 specialist with availability rules
+ * - 1 admin
+ * - 1 normal user
  *
- * Password for both users: password123
+ * Password for all users: password123
  *
- * Run: pnpm db:seed
- * Needed: DATABASE_URL в .env
+ * Run:
+ *   pnpm db:seed
+ *
+ * Requires:
+ *   DATABASE_URL in .env
  */
+
 import "dotenv/config";
 import { randomUUID } from "node:crypto";
 import { hashPassword } from "better-auth/crypto";
+import { eq } from "drizzle-orm";
+
 import { db } from "../src/db";
 import { user, account } from "../src/db/schema";
 import { specialistProfile } from "../src/db/specialist";
 import { availabilityRule } from "../src/db/availabilityRule";
-import { eq } from "drizzle-orm";
 
 const TEST_PASSWORD = "password123";
 
-const specialists = [
-  {
-    email: "specialist1@test.com",
-    name: "Anna Specialist",
-    bio: "Консультации по фронтенду и TypeScript.",
-    tags: "react,typescript,frontend",
-  },
-  {
-    email: "specialist2@test.com",
-    name: "Boris Expert",
-    bio: "Карьерный коучинг и soft skills.",
-    tags: "career,coaching",
-  },
-];
+const specialistUser = {
+  email: "specialist@test.com",
+  name: "Anna Specialist",
+  bio: "Frontend and TypeScript consulting.",
+  tags: "react,typescript,frontend",
+};
 
 const adminUser = {
   email: "admin@test.com",
   name: "Admin User",
 };
 
+const normalUser = {
+  email: "user@test.com",
+  name: "John User",
+};
+
 async function ensureUser(
-  email: string,
-  name: string,
-  role: "USER" | "SPECIALIST" | "ADMIN",
+    email: string,
+    name: string,
+    role: "USER" | "SPECIALIST" | "ADMIN",
 ) {
-  const [existing] = await db.select().from(user).where(eq(user.email, email));
+  const [existing] = await db
+      .select()
+      .from(user)
+      .where(eq(user.email, email));
+
   if (existing) {
-    await db.update(user).set({ name, role }).where(eq(user.id, existing.id));
+    await db
+        .update(user)
+        .set({ name, role })
+        .where(eq(user.id, existing.id));
     return existing.id;
   }
 
@@ -62,6 +72,7 @@ async function ensureUser(
     emailVerified: true,
     role,
   });
+
   await db.insert(account).values({
     id: randomUUID(),
     accountId: id,
@@ -69,25 +80,28 @@ async function ensureUser(
     userId: id,
     password: passwordHash,
   });
+
   return id;
 }
 
 async function ensureSpecialistProfile(
-  userId: string,
-  bio: string,
-  tags: string,
+    userId: string,
+    bio: string,
+    tags: string,
 ) {
   const [existing] = await db
-    .select()
-    .from(specialistProfile)
-    .where(eq(specialistProfile.userId, userId));
+      .select()
+      .from(specialistProfile)
+      .where(eq(specialistProfile.userId, userId));
+
   if (existing) {
     await db
-      .update(specialistProfile)
-      .set({ bio, tags })
-      .where(eq(specialistProfile.id, existing.id));
+        .update(specialistProfile)
+        .set({ bio, tags })
+        .where(eq(specialistProfile.id, existing.id));
     return;
   }
+
   await db.insert(specialistProfile).values({
     id: randomUUID(),
     userId,
@@ -98,9 +112,10 @@ async function ensureSpecialistProfile(
 
 async function ensureAvailabilityRules(specialistId: string) {
   const existing = await db
-    .select()
-    .from(availabilityRule)
-    .where(eq(availabilityRule.specialistId, specialistId));
+      .select()
+      .from(availabilityRule)
+      .where(eq(availabilityRule.specialistId, specialistId));
+
   if (existing.length > 0) return;
 
   const rules = [
@@ -126,34 +141,48 @@ async function ensureAvailabilityRules(specialistId: string) {
 
 async function main() {
   if (!process.env.DATABASE_URL) {
-    console.error("DATABASE_URL не задан. Добавьте в .env");
+    console.error("DATABASE_URL is missing. Add it to .env");
     process.exit(1);
   }
 
-  console.log("Seed: создаём тестовых специалистов и админа...\n");
+  console.log("Seeding demo users...\n");
 
-  for (const s of specialists) {
-    const id = await ensureUser(s.email, s.name, "SPECIALIST");
-    await ensureSpecialistProfile(id, s.bio, s.tags);
-    await ensureAvailabilityRules(id);
-    console.log(
-      "  Специалист:",
-      s.email,
-      "— слоты на ближайшие 14 дней по правилам.",
-    );
-  }
-
-  await ensureUser(adminUser.email, adminUser.name, "ADMIN");
-  console.log("  Админ:", adminUser.email);
-
-  console.log("\nГотово. Пароль для всех тестовых аккаунтов: password123");
-  console.log(
-    "  Вход: specialist1@test.com, specialist2@test.com, admin@test.com",
+  // Specialist
+  const specialistId = await ensureUser(
+      specialistUser.email,
+      specialistUser.name,
+      "SPECIALIST",
   );
-  console.log("  Под своим user откройте /specialists и бронируйте слоты.");
+  await ensureSpecialistProfile(
+      specialistId,
+      specialistUser.bio,
+      specialistUser.tags,
+  );
+  await ensureAvailabilityRules(specialistId);
+
+  console.log(
+      "  Specialist created:",
+      specialistUser.email,
+      "(availability rules applied)",
+  );
+
+  // Admin
+  await ensureUser(adminUser.email, adminUser.name, "ADMIN");
+  console.log("  Admin created:", adminUser.email);
+
+  // Normal user
+  await ensureUser(normalUser.email, normalUser.name, "USER");
+  console.log("  User created:", normalUser.email);
+
+  console.log("\nSeed completed successfully.");
+  console.log("Password for all accounts:", TEST_PASSWORD);
+  console.log("Logins:");
+  console.log("  Specialist:", specialistUser.email);
+  console.log("  Admin:", adminUser.email);
+  console.log("  User:", normalUser.email);
 }
 
-main().catch((e) => {
-  console.error(e);
+main().catch((err) => {
+  console.error(err);
   process.exit(1);
 });

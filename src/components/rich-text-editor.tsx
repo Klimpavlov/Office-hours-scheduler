@@ -114,7 +114,6 @@ export function RichTextEditor({
     return () => editor.off("update", notifyChange);
   }, [editor, notifyChange]);
 
-  // Sync external value (e.g. form reset)
   useEffect(() => {
     if (!editor) return;
     const current = editor.getJSON() as TiptapDoc;
@@ -131,7 +130,6 @@ export function RichTextEditor({
     >
       {toolbar({ editor })}
       <EditorContent editor={editor} />
-      {/* Placeholder is handled by Tiptap's placeholder extension if we add it; otherwise leave as-is */}
     </div>
   );
 }

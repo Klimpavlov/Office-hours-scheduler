@@ -1,9 +1,5 @@
 import type { TiptapDoc } from "@/lib/rich-text";
 
-/**
- * Safely renders Tiptap JSON as React nodes. No raw HTML to avoid XSS.
- * Supports: paragraph, text, bold, italic, link, bulletList, orderedList, listItem.
- */
 export function RichTextContent({
   doc,
   className,

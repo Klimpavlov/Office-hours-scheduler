@@ -1,7 +1,6 @@
 import { generateText } from "ai";
 import { openai } from "@ai-sdk/openai";
 
-/** Moderation status. PENDING = not yet run or API unavailable (e.g. region blocked). */
 export type ModerationStatus = "PENDING" | "APPROVED" | "FLAGGED" | "REJECTED";
 
 export interface ModerationResult {
@@ -13,7 +12,6 @@ export interface ModerationResult {
 const MODEL_ID = "gpt-4o-mini";
 const PROVIDER = "openai";
 
-/** Result of moderateBookingText; may be PENDING when provider is unavailable (e.g. 403 region). */
 export type ModerationOutput = {
   status: ModerationStatus;
   reason?: string;
@@ -22,11 +20,6 @@ export type ModerationOutput = {
   provider: string;
 };
 
-/**
- * Moderate booking description using Vercel AI SDK (OpenAI).
- * Only the description text is sent; no user email/name. See README for guardrails.
- * On API errors (e.g. "Country not supported" 403), returns PENDING so the booking still saves.
- */
 export async function moderateBookingText(
   text: string,
 ): Promise<ModerationOutput> {

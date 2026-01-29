@@ -79,7 +79,7 @@ export function BookingForm({
             <div className="space-y-2">
               <Label>Slot</Label>
               <select
-                className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm"
+                className="flex h-9 w-1/2 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm"
                 value={form.watch("startsAt")}
                 onChange={(e) => {
                   const v = e.target.value;

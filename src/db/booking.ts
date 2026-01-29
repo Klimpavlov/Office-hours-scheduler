@@ -23,7 +23,6 @@ export const moderationStatusEnum = pgEnum("moderation_status", [
   "REJECTED",
 ]);
 
-/** Rich-text content stored as Tiptap JSON. See README for allowed shape. */
 export const booking = pgTable(
   "booking",
   {
@@ -61,7 +60,6 @@ export const booking = pgTable(
     statusChangedBy: text("status_changed_by"),
   },
   (table) => ({
-    /** Concurrency: one booking per (specialist, startsAt). Prevents double-booking. */
     uniqueSlot: uniqueIndex("booking_specialist_starts_at_unique").on(
       table.specialistId,
       table.startsAt,
