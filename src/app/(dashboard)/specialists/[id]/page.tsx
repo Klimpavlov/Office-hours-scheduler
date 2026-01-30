@@ -3,9 +3,10 @@ import {
   getSpecialistById,
   getSpecialistSlotsNext14Days,
 } from "@/actions/specialist";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { BookingForm } from "./booking-form";
+import { SlotsList } from "@/app/(dashboard)/specialists/[id]/slots-list";
 
 export default async function SpecialistPage({
   params,
@@ -51,30 +52,7 @@ export default async function SpecialistPage({
             No slots available in the next 14 days.
           </p>
         ) : (
-          <div className="grid gap-2 sm:grid-cols-2 md:grid-cols-3">
-            {slots.map((slot) => (
-              <div
-                key={slot.startsAt.toISOString()}
-                className="rounded-lg border px-3 py-2 text-sm"
-              >
-                {slot.startsAt.toLocaleString(undefined, {
-                  weekday: "short",
-                  month: "short",
-                  day: "numeric",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}{" "}
-                –{" "}
-                {slot.endsAt.toLocaleTimeString(undefined, {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-                {slot.isBooked && (
-                  <span className="ml-2 text-muted-foreground">(booked)</span>
-                )}
-              </div>
-            ))}
-          </div>
+          <SlotsList slots={slots} />
         )}
       </section>
 
