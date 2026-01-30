@@ -22,7 +22,7 @@ export default async function SpecialistPage({
   if (!specialist) notFound();
 
   return (
-    <div className="mx-auto max-w-4xl space-y-8 p-6">
+    <div className="w-full mx-auto max-w-4xl space-y-8 p-6">
       <Card>
         <CardHeader className="flex flex-row items-center gap-4">
           <Avatar className="h-16 w-16">
